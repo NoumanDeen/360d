@@ -319,19 +319,41 @@ if (window.innerWidth <= 768) {
         ease: 'power2.out'
     });
     
-    // Press items stagger animation
-    gsap.from('.press-item', {
-        scrollTrigger: {
-            trigger: '.press-section',
-            start: 'top 80%',
-            end: 'top 30%',
-            scrub: 1
-        },
-        y: 60,
-        opacity: 0,
-        stagger: 0.1,
-        ease: 'power2.out'
-    });
+    // Press items stagger animation (desktop only)
+    if (window.innerWidth > 768) {
+        gsap.from('.press-item', {
+            scrollTrigger: {
+                trigger: '.press-section',
+                start: 'top 80%',
+                end: 'top 30%',
+                scrub: 1
+            },
+            y: 60,
+            opacity: 0,
+            stagger: 0.1,
+            ease: 'power2.out'
+        });
+    }
+    
+    // Mobile: Image scale animation on scroll
+    if (window.innerWidth <= 768) {
+        const pressItems = document.querySelectorAll('.press-item');
+        
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, observerOptions);
+        
+        pressItems.forEach(item => observer.observe(item));
+    }
 }
 
 
